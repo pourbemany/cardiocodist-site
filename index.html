@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CardioCodist — AI ECG Analysis for Clinics & Devices</title>
+  <meta name="description" content="Upload ECG recordings → automatic arrhythmia detection → clinician-style summaries. HIPAA-ready, built on AWS.">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#121938;
+      --accent:#5ac8fa;
+      --accent-2:#7c4dff;
+      --text:#e6e9f0;
+      --muted:#b8bfd7;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1020 0%,#0b1020 40%,#0e1430 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;line-height:1.6}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);background:rgba(11,16,32,.7);border-bottom:1px solid rgba(255,255,255,.06);z-index:10}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:#fff;text-decoration:none}
+    .logo{width:28px;height:28px;border-radius:8px;background:conic-gradient(from 180deg,var(--accent),var(--accent-2));box-shadow:0 0 0 2px rgba(255,255,255,.06) inset}
+    .nav a{color:var(--muted);margin-left:18px}
+    .btn{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#0b1020;font-weight:700;border:none;border-radius:999px;padding:12px 18px;box-shadow:var(--shadow);transition:transform .08s ease}
+    .btn:hover{transform:translateY(-1px);text-decoration:none}
+    .btn.outline{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--text);box-shadow:none}
+    .hero{padding:64px 0 28px}
+    .hero-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .kicker{display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;margin-bottom:16px}
+    h1{font-size:40px;line-height:1.15;margin:0 0 12px}
+    .lead{font-size:18px;color:#d2d7eb;margin:0 0 22px}
+    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+    .chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:8px 12px;font-size:13px;color:#dbe3ff}
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
+    .section{padding:48px 0}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);min-height:180px}
+    .card h3{margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .list{margin:8px 0 0;padding:0 0 0 18px}
+    .panel{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    footer{padding:40px 0 60px;color:#9aa3bf}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
+    .fine{font-size:12px;color:#8e95b5}
+    @media (max-width: 900px){
+      .hero-wrap, .grid-2, .cards, .footer-grid{grid-template-columns:1fr}
+      .hero{padding-top:32px}
+      h1{font-size:32px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top"><span class="logo" aria-hidden="true"></span>CardioCodist</a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#compliance">Compliance</a>
+        <a href="#contact" class="btn">Request a Pilot</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="container">
+    <section class="hero">
+      <div class="hero-wrap">
+        <div>
+          <span class="kicker">AI ECG Analysis</span>
+          <h1>Upload ECG. Get beat‑level labels and a clinician‑style summary.</h1>
+          <p class="lead">HIPAA‑ready cloud analytics for clinics, telehealth, and med‑device teams. Built on AWS SageMaker &amp; Bedrock for scale, speed, and security.</p>
+          <div class="cta">
+            <a class="btn" href="mailto:info@cardiocodist.com?subject=Pilot%20Request%20%E2%80%94%20CardioCodist">Request a Pilot</a>
+            <a class="btn outline" href="#features">See capabilities</a>
+          </div>
+          <div class="hero-grid">
+            <div class="chip"><span class="dot"></span> Arrhythmia detection</div>
+            <div class="chip"><span class="dot"></span> Beat‑level annotations</div>
+            <div class="chip"><span class="dot"></span> Clinician‑style summaries</div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3 style="margin-top:0">At a glance</h3>
+          <ul class="list">
+            <li>Secure ECG upload via encrypted storage</li>
+            <li>Automated detection (AFib, PVCs, AV block)</li>
+            <li>Summary report with episode counts &amp; durations</li>
+            <li>Audit trails &amp; versioned models</li>
+            <li>Elastic API for bulk or real‑time use</li>
+          </ul>
+          <p class="muted" style="margin-top:12px">Deployment options: CPU for pilots, GPU for high‑volume; multi‑model endpoints to optimize cost.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="cards">
+        <div class="card">
+          <h3>Automated Arrhythmia Detection</h3>
+          <p class="muted">Deep‑learning models tuned on long‑form recordings detect AFib, PVCs, AV block and more, with beat‑level outputs for review.</p>
+        </div>
+        <div class="card">
+          <h3>Clinician‑Style Summaries</h3>
+          <p class="muted">Structured findings are transformed into clear, physician‑readable summaries to accelerate reporting and workflow.</p>
+        </div>
+        <div class="card">
+          <h3>HIPAA‑Ready Infrastructure</h3>
+          <p class="muted">Encryption at rest &amp; in transit, least‑privilege access, audit logs, and BAA availability on HIPAA‑eligible AWS services.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="grid-2">
+        <div class="panel">
+          <h3>How it works</h3>
+          <ol class="list">
+            <li><strong>Upload ECG</strong> via secure portal or API (bulk &amp; streaming supported).</li>
+            <li><strong>Inference</strong> on managed endpoints (right‑sized CPU/GPU with autoscale).</li>
+            <li><strong>Review</strong> beat‑level annotations and episode summaries in the dashboard.</li>
+            <li><strong>Report</strong> export in PDF/JSON with full traceability.</li>
+          </ol>
+        </div>
+        <div class="panel">
+          <h3>Technical stack</h3>
+          <ul class="list">
+            <li>AWS SageMaker for training &amp; real‑time inference</li>
+            <li>Amazon S3 with KMS keys and VPC endpoints</li>
+            <li>EventBridge for scheduled retraining</li>
+            <li>CloudWatch for monitoring &amp; drift alerts</li>
+            <li>Bedrock LLMs for narrative summaries</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="compliance" class="section">
+      <div class="panel">
+        <h3>Compliance</h3>
+        <p class="muted">We follow best practices for PHI: store PHI only in HIPAA‑eligible services, encrypt data at rest and in transit, maintain access controls and audit logging, and execute a Business Associate Addendum (BAA) upon request.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="panel">
+        <h3>Request a pilot</h3>
+        <p class="muted">Ready to evaluate CardioCodist with your clinical or device workflow?</p>
+        <div class="cta">
+          <a class="btn" href="mailto:info@cardiocodist.com?subject=Pilot%20Request%20%E2%80%94%20CardioCodist&body=Tell%20us%20a%20bit%20about%20your%20use%20case%20and%20ECG%20volume.">Email us</a>
+          <a class="btn outline" href="#top">Back to top</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand"><span class="logo" aria-hidden="true"></span>CardioCodist</div>
+        <p class="fine">AI‑powered ECG analysis for clinics, telehealth, and device makers.</p>
+      </div>
+      <div>
+        <strong>Company</strong><br>
+        <a href="#">About</a><br>
+        <a href="#">Privacy</a><br>
+        <a href="#">Terms</a>
+      </div>
+      <div>
+        <strong>Contact</strong><br>
+        <a href="mailto:info@cardiocodist.com">info@cardiocodist.com</a><br>
+        Cleveland, OH
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
